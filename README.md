@@ -1,6 +1,7 @@
 # ruby-unison
 
 Ruby interface of the command of file synchronizer [unison](http://www.cis.upenn.edu/~bcpierce/unison/).
+ruby-unison defines UnisonCommand class to execute unison in unison.rb.
 
 ## Installation
 
@@ -13,6 +14,9 @@ Ruby interface of the command of file synchronizer [unison](http://www.cis.upenn
     require 'unison'
     uc = UnisonCommand.new("pref", "root1", "root2")
     uc.execute
+    
+    uc = UnisonCommand.new("root1", "root2")
+    uc.execute
 
 ### Dry run
 
@@ -24,6 +28,13 @@ Ruby interface of the command of file synchronizer [unison](http://www.cis.upenn
 
     require 'unison'
     uc = UnisonCommand.new("root1", "root2", :force => "root2", :path => ["Document", "Desktop"], :auto => true)
+    uc.execute
+
+### Change of unison path
+
+    require 'unison'
+    uc = UnisonCommand.new("root1", "root2")
+    uc.command = "/path/to/unison"
     uc.execute
 
 ## Contributing to ruby-unison
