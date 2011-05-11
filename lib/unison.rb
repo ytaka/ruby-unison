@@ -76,15 +76,15 @@ class UnisonCommand
   class InvalidOption < StandardError
   end
 
-  class NonExsistentOption < StandardError
+  class NonExistentOption < StandardError
   end
 
   attr_accessor :profile, :root1, :root2, :option, :command
 
   # +args+ accepts the following three pattern:
-  # - root1, root2, opts = {}
-  # - profilename, opts = {}
-  # - profilename, root1, root2, opts = {}
+  # - root1, root2, opts = \{\}
+  # - profilename, opts = \{\}
+  # - profilename, root1, root2, opts = \{\}
   # We set option of unison command to optinal hash.
   # The keys are symbols made from hypen-removed options of unison command and
   # the values are booleans (true or false), strings, and arrays of strings
@@ -144,7 +144,7 @@ class UnisonCommand
           cmd << "-#{key}" << v
         end
       else
-        raise UnisonCommand::NonExsistentOption, "Nonexistent unison option: #{key.to_s}"
+        raise UnisonCommand::NonExistentOption, "Nonexistent unison option: #{key.to_s}"
       end
     end
     cmd.compact!
