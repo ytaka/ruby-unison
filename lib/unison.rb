@@ -89,6 +89,8 @@ class UnisonCommand
   # The keys are symbols made from hypen-removed options of unison command and
   # the values are booleans (true or false), strings, and arrays of strings
   # corresponding to unison's options.
+  # Note that to set boolean option we do not use a string 'true' or 'false',
+  # but we use TrueClass, FalseClass, or NilClass.
   def initialize(*args)
     if Hash === args[-1]
       @option = args[-1]
@@ -122,8 +124,15 @@ class UnisonCommand
       if spec = UNISON_OPTION_SPEC[key.intern]
         case spec
         when :bool
-          if val
-            cmd << "-#{key}"
+          case val
+          when TrueClass, FalseClass, NilClass
+            if val
+              cmd << "-#{key}"
+            else
+              cmd << "-#{key}=false"
+            end
+          else
+            raise UnisonCommand::InvalidOption, "We use TrueClass, FalseClass, or NilClass for #{key}."
           end
         when :array
           k = "-#{key}"
