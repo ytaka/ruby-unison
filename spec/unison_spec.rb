@@ -51,4 +51,23 @@ describe UnisonCommand do
                                 "-path", "Document", "-path", "Desktop", "-auto"]
   end
 
+  it "should raise UnisonCommand::InvalidOption" do
+    uc = UnisonCommand.new("root1", "root2", :backuplocation => "invalid")
+    lambda do
+      uc.execute
+    end.should raise_error(UnisonCommand::InvalidOption)
+  end
+
+  it "should raise UnisonCommand::NonExistentOption" do
+    uc = UnisonCommand.new("root1", "root2", :autoo => true)
+    lambda do
+      uc.execute
+    end.should raise_error(UnisonCommand::NonExistentOption)
+  end
+
+  it "should change unison path" do
+    uc = UnisonCommand.new("root1", "root2")
+    uc.command = "/usr/local/bin/unison"
+    uc.execute(true).should == ["/usr/local/bin/unison", "root1", "root2"]
+  end
 end
