@@ -1,4 +1,4 @@
-class Unison
+class UnisonCommand
   UNISON_DEFAULT_COMMAND = 'unison'
   UNISON_OPTION_SPEC = {
     :addprefsto => :array,
@@ -8,7 +8,7 @@ class Unison
     :backupcurrent => :array,
     :backupcurrentnot => :array,
     :backupdir => :string,
-    :backuplocation => ['local', 'central']
+    :backuplocation => ['local', 'central'],
     :backupnot => :array,
     :backupprefix => :string,
     :backups => :bool,
@@ -17,7 +17,7 @@ class Unison
     :confirmbigdeletes => :bool,
     :confirmmerge => :bool,
     :contactquietly => :bool,
-    :debug => ['all', 'verbose']
+    :debug => ['all', 'verbose'],
     :dumbtty => :bool,
     :fastcheck => ['true', 'false', 'default'],
     :follow => :array,
@@ -48,7 +48,7 @@ class Unison
     :preferpartial => :array,
     :pretendwin => :bool,
     :repeat => :string,
-    :retry => :number
+    :retry => :number,
     :root => :array,
     :rootalias => :array,
     :rsrc => ['true', 'false', 'default'],
@@ -73,12 +73,22 @@ class Unison
   # The options -doc, -heeight, -version are ignored.
   # The option -ui is set 'text' to.
 
+  class InvalidOption < StandardError
+  end
+
+  class NonExsistentOption < StandardError
+  end
+
   attr_accessor :profile, :root1, :root2, :option, :command
 
-  # +args+
-  # root1, root2, opts = {}
-  # profilename, opts = {}
-  # profilename, root1, root2, opts = {}
+  # +args+ accepts the following three pattern:
+  # - root1, root2, opts = {}
+  # - profilename, opts = {}
+  # - profilename, root1, root2, opts = {}
+  # We set option of unison command to optinal hash.
+  # The keys are symbols made from hypen-removed options of unison command and
+  # the values are booleans (true or false), strings, and arrays of strings
+  # corresponding to unison's options.
   def initialize(*args)
     if Hash === args[-1]
       @option = args[-1]
@@ -113,7 +123,7 @@ class Unison
         case spec
         when :bool
           if val
-            cmd << "-#{key}" << val.to_s
+            cmd << "-#{key}"
           end
         when :array
           k = "-#{key}"
@@ -125,25 +135,47 @@ class Unison
             cmd << k << val.to_s
           end
         when :string
-          cmd << "-#{key}" << spec.to_s
+          cmd << "-#{key}" << val.to_s
         when Array
           v = val.to_s
           unless spec.include?(v)
-            raise StandardError, "Invalid unison option for #{key}: #{v}"
+            raise UnisonCommand::InvalidOption, "Invalid unison option for #{key}: #{v}"
           end
           cmd << "-#{key}" << v
         end
       else
-        raise StandardError, "Nonexistent unison option: #{key.to_s}"
+        raise UnisonCommand::NonExsistentOption, "Nonexistent unison option: #{key.to_s}"
       end
     end
     cmd.compact!
+    cmd
   end
   private :get_command
 
-  def execute
+  # The method returns :success when all files are synchronized,
+  # :skipped when some files are skipped,
+  # :non_fatal_error when non fatal error occurs, and
+  # :fatal_error when fatal error occurs or process is interrupted.
+  # If +dry_run+ is true, the method returns
+  # an array of a unison command to execute.
+  def execute(dry_run = false)
     cmd = get_command
+    if dry_run
+      return cmd
+    end
     # Search exit code of unison command.
-    system(cmd)
+    Kernel.system(*cmd)
+    case $?
+    when 0
+      :success
+    when 1
+      :skipped
+    when 2
+      :non_fatal_error
+    when 3
+      :fatal_error
+    else
+      raise StandardError, "Invalid exit code of unison."
+    end
   end
 end
