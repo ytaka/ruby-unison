@@ -16,9 +16,9 @@ Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "ruby-unison"
   gem.homepage = "http://github.com/ytaka/ruby-unison"
-  gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.license = "GPLv3"
+  gem.summary = "ruby-unison"
+  gem.description = "Ruby interface of the command of file synchronizer unison"
   gem.email = "d@ytak.info"
   gem.authors = ["Takayuki YAMAGUCHI"]
   # dependencies defined in Gemfile
