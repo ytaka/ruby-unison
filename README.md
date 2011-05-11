@@ -2,20 +2,27 @@
 
 Ruby interface of the command of file synchronizer [unison](http://www.cis.upenn.edu/~bcpierce/unison/).
 
+## Installation
+
+    gem install ruby-unison
+
 ## Examples
 
 ### Basic usage
 
+    require 'unison'
     uc = UnisonCommand.new("pref", "root1", "root2")
     uc.execute
 
 ### Dry run
 
+    require 'unison'
     uc = UnisonCommand.new("pref", "root1", "root2")
     uc.execute(true)
 
 ### Usage of unison options
 
+    require 'unison'
     uc = UnisonCommand.new("root1", "root2", :force => "root2", :path => ["Document", "Desktop"], :auto => true)
     uc.execute
 
