@@ -20,6 +20,11 @@ describe UnisonCommand do
     uc.execute(true).should == ["unison", "pref", "root1", "root2", "-auto"]
   end
 
+  it "should return unison command with a boolean option false" do
+    uc = UnisonCommand.new("pref", "root1", "root2", :auto => false)
+    uc.execute(true).should == ["unison", "pref", "root1", "root2", "-auto=false"]
+  end
+
   it "should return unison command with two arguments and a boolean option" do
     uc = UnisonCommand.new("root1", "root2", :auto => true)
     uc.execute(true).should == ["unison", "root1", "root2", "-auto"]
@@ -53,6 +58,13 @@ describe UnisonCommand do
 
   it "should raise UnisonCommand::InvalidOption" do
     uc = UnisonCommand.new("root1", "root2", :backuplocation => "invalid")
+    lambda do
+      uc.execute
+    end.should raise_error(UnisonCommand::InvalidOption)
+  end
+
+  it "should raise UnisonCommand::InvalidOption" do
+    uc = UnisonCommand.new("root1", "root2", :auto => 'true')
     lambda do
       uc.execute
     end.should raise_error(UnisonCommand::InvalidOption)
