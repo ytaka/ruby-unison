@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{ruby-unison}
-  s.version = "0.0.0"
+  s.version = "0.0.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Takayuki YAMAGUCHI"]
-  s.date = %q{2011-05-11}
+  s.date = %q{2011-05-12}
   s.description = %q{Ruby interface of the command of file synchronizer unison}
   s.email = %q{d@ytak.info}
   s.extra_rdoc_files = [
@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
     "Rakefile",
     "VERSION",
     "lib/unison.rb",
+    "ruby-unison.gemspec",
     "spec/spec_helper.rb",
     "spec/unison_spec.rb"
   ]
