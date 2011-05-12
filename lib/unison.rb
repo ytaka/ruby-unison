@@ -205,4 +205,8 @@ class UnisonCommand
       raise StandardError, "Invalid exit code of unison: #{$?}."
     end
   end
+
+  def version
+    `#{@command} -version`.split[2]
+  end
 end

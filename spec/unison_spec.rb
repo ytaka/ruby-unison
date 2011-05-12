@@ -128,4 +128,9 @@ describe UnisonCommand do
     uc.stub(:get_execute_result).and_return(mock)
     uc.execute.should == :success
   end
+
+  it "should return version of unison" do
+    uc = UnisonCommand.new("root1", "root2")
+    uc.version.should match(/^[0-9.]+$/)
+  end
 end
