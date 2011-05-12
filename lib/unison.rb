@@ -184,7 +184,7 @@ class UnisonCommand
     when 3
       :fatal_error
     else
-      raise StandardError, "Invalid exit code of unison."
+      raise StandardError, "Invalid exit code of unison: #{$?}."
     end
   end
 end
