@@ -164,7 +164,7 @@ class UnisonCommand
   private :get_command
 
   def get_execute_result
-    $:
+    $?
   end
   private :get_execute_result
 
