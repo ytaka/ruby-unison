@@ -51,6 +51,8 @@ class UnisonCommand
     :retry => :number,
     :root => :array,
     :rootalias => :array,
+    :rshargs => :string,
+    :rshcmd => :string,
     :rsrc => ['true', 'false', 'default'],
     :rsync => :bool,
     :selftest => :bool,
