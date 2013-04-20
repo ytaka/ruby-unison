@@ -82,4 +82,50 @@ describe UnisonCommand do
     uc.command = "/usr/local/bin/unison"
     uc.execute(true).should == ["/usr/local/bin/unison", "root1", "root2"]
   end
+
+  it "should return :success for run with exit code of 0" do
+    Kernel.should_receive(:system).with("unison", "root1", "root2")
+    uc = UnisonCommand.new("root1", "root2")
+    uc.stub(:get_exit_status).and_return(0)
+    uc.execute.should == :success
+  end
+
+  it "should return :skipped for a run with exit code of 1" do
+    Kernel.should_receive(:system).with("unison", "root1", "root2")
+    uc = UnisonCommand.new("root1", "root2")
+    uc.stub(:get_exit_status).and_return(1)
+    uc.execute.should == :skipped
+  end
+
+  it "should return :non_fatal_error for a run with exit code of 2" do
+    Kernel.should_receive(:system).with("unison", "root1", "root2")
+    uc = UnisonCommand.new("root1", "root2")
+    uc.stub(:get_exit_status).and_return(2)
+    uc.execute.should == :non_fatal_error
+  end
+
+  it "should return :fatal_error for a run with exit code of 3" do
+    Kernel.should_receive(:system).with("unison", "root1", "root2")
+    uc = UnisonCommand.new("root1", "root2")
+    uc.stub(:get_exit_status).and_return(3)
+    uc.execute.should == :fatal_error
+  end
+
+  it "should return raise exception when an unknown exit code is returned" do
+    Kernel.should_receive(:system).with("unison", "root1", "root2")
+    uc = UnisonCommand.new("root1", "root2")
+    uc.stub(:get_exit_status).and_return(4)
+    lambda do
+      uc.execute
+    end.should raise_error
+  end
+
+  it "should handle Process::Status for $?" do
+    Kernel.should_receive(:system).with("unison", "root1", "root2")
+    uc = UnisonCommand.new("root1", "root2")
+    mock = Object.new
+    mock.stub(:exitstatus).and_return(0)
+    uc.stub(:get_execute_result).and_return(mock)
+    uc.execute.should == :success
+  end
 end
