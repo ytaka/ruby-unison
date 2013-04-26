@@ -51,6 +51,8 @@ class UnisonCommand
     :retry => :number,
     :root => :array,
     :rootalias => :array,
+    :rshargs => :string,
+    :rshcmd => :string,
     :rsrc => ['true', 'false', 'default'],
     :rsync => :bool,
     :selftest => :bool,
@@ -161,6 +163,22 @@ class UnisonCommand
   end
   private :get_command
 
+  def get_execute_result
+    $?
+  end
+  private :get_execute_result
+
+  def get_exit_status
+    result = get_execute_result
+
+    if result.respond_to?(:exitstatus)
+      result.exitstatus
+    else
+      result
+    end
+  end
+  private :get_exit_status
+
   # The method returns :success when all files are synchronized,
   # :skipped when some files are skipped,
   # :non_fatal_error when non fatal error occurs, and
@@ -174,7 +192,7 @@ class UnisonCommand
     end
     # Search exit code of unison command.
     Kernel.system(*cmd)
-    case $?
+    case get_exit_status
     when 0
       :success
     when 1
