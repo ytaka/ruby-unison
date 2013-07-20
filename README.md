@@ -5,9 +5,19 @@ ruby-unison defines UnisonCommand class to execute unison in unison.rb.
 
 ## Installation
 
-    gem install ruby-unison
+Add this line to your application's Gemfile:
 
-## Examples
+    gem 'ruby-unison'
+
+And then execute:
+
+    $ bundle
+
+Or install it yourself as:
+
+    $ gem install ruby-unison
+
+## Examples of usage
 
 ### Basic usage
 
@@ -46,8 +56,3 @@ ruby-unison defines UnisonCommand class to execute unison in unison.rb.
 - Commit and push until you are happy with your contribution
 - Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
 - Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
-
-## Copyright
-
-Copyright (c) 2011 Takayuki YAMAGUCHI. See LICENSE.txt for
-further details.
