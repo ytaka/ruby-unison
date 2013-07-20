@@ -6,15 +6,6 @@ describe UnisonCommand do
     uc.execute(true).should == ["unison", "pref", "root1", "root2"]
   end
 
-  it "should execute unison command" do
-    Kernel.should_receive(:system).with("unison", "pref", "root1", "root2")
-    uc = UnisonCommand.new("pref", "root1", "root2")
-    # Because exit code is invalid, an error occurs.
-    lambda do
-      uc.execute
-    end.should raise_error
-  end
-
   it "should return unison command with a boolean option" do
     uc = UnisonCommand.new("pref", "root1", "root2", :auto => true)
     uc.execute(true).should == ["unison", "pref", "root1", "root2", "-auto"]
