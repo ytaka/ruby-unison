@@ -120,6 +120,22 @@ describe UnisonCommand do
     uc.execute.should == :success
   end
 
+  it "should return status of last execution" do
+    Kernel.should_receive(:system).with("unison", "root1", "root2")
+    uc = UnisonCommand.new("root1", "root2")
+    mock = Object.new
+    mock.stub(:exitstatus).and_return(0)
+    uc.stub(:get_execute_result).and_return(mock)
+    uc.execute
+    uc.status.should == mock
+  end
+
+  it "should return nil as status of last execution" do
+    uc = UnisonCommand.new("root1", "root2")
+    uc.execute(true)
+    uc.status.should be_nil
+  end
+
   it "should return version of unison" do
     uc = UnisonCommand.new("root1", "root2")
     uc.version.should match(/^[0-9.]+$/)
