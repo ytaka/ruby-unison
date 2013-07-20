@@ -82,6 +82,7 @@ class UnisonCommand
   end
 
   attr_accessor :profile, :root1, :root2, :option, :command
+  attr_reader :status
 
   # +args+ accepts the following three pattern:
   # - root1, root2, opts = \{\}
@@ -117,6 +118,7 @@ class UnisonCommand
       raise ArgumentError, "Invalid"
     end
     @command = UNISON_DEFAULT_COMMAND
+    @status = nil
   end
 
   def get_command
@@ -169,12 +171,12 @@ class UnisonCommand
   private :get_execute_result
 
   def get_exit_status
-    result = get_execute_result
+    @status = get_execute_result
 
-    if result.respond_to?(:exitstatus)
-      result.exitstatus
+    if @status.respond_to?(:exitstatus)
+      @status.exitstatus
     else
-      result
+      @status
     end
   end
   private :get_exit_status
@@ -188,6 +190,7 @@ class UnisonCommand
   def execute(dry_run = false)
     cmd = get_command
     if dry_run
+      @status = nil
       return cmd
     end
     # Search exit code of unison command.
@@ -202,7 +205,7 @@ class UnisonCommand
     when 3
       :fatal_error
     else
-      raise StandardError, "Invalid exit code of unison: #{$?}."
+      raise StandardError, "Invalid exit code of unison: #{status.inspect.strip}."
     end
   end
 
